@@ -47,7 +47,6 @@ def get_jwt_email():
         try:
             token=auth.split(' ')[1]
             payload=jwt.decode(token,secret_key,algorithms=['HS256'])
-            print(payload)
             return payload.get('email')
         except Exception as e:
             return ({'message':e}),401
