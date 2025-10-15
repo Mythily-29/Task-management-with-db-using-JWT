@@ -41,8 +41,12 @@ class Task_operations:
     def filter_status(self,email,status):
         return task_table.find({"email":email,"status":status},{'_id':0})
     
-    def filter_priority(self,email, priority):
-        return task_table.find({"email":email,"priority":priority},{'_id':0})
+    def filter_priority(self,email=None,status=None,date=None ,priority=None):
+        if status and date:
+            return task_table.find({"email":email,"status":status,"due_date":date,"priority":priority},{'_id':0})
+        else:
+            return task_table.find({"email":email,"priority":priority},{'_id':0})
+
     
     def sort_duedate(self,email, order = 'asc'):
         sorting = ASCENDING if order == 'asc' else DESCENDING

@@ -75,7 +75,7 @@ def filtering(status):
 @check_token_expiry
 def priority_filter(priority):
     currentemail=get_jwt_email()
-    result = list(task_op.filter_priority(currentemail,priority))
+    result = list(task_op.filter_priority(email=currentemail,priority=priority))
     if result:
          return jsonify({'data':result}),200
     else:
@@ -116,6 +116,17 @@ def get_single_task(id):
         return jsonify({'data':data}),200
     else:
         return jsonify({'message':'No data found'}),200
+
+@app.route('/gettask/<status>/<date>/<priority>')
+@check_token_expiry
+def filtered(status,date,priority):
+    currentemail=get_jwt_email()
+    result = list(task_op.filter_priority(email=currentemail,status=status,date=date,priority=priority))
+    if result:
+         return jsonify({'data':result}),200
+    else:
+        return jsonify({'data':'No data found'})
+
 
 if __name__=="__main__":
     app.run(debug=True)
