@@ -1,0 +1,46 @@
+===========JS code
+
+========in pre request api
+
+let url=pm.request.url.toString()
+
+let not_required=['/login','/signup']
+
+let get_route=not_required.some(route=>url.includes(route))
+
+let jwt=pm.environment.get('jwt')
+
+if (get_route != true){
+    if (jwt){
+        pm.request.headers.add({
+        key: 'Authorization',
+        value: 'Bearer ' + jwt
+    });
+   } 
+}
+
+
+======== post request api
+
+
+if(pm.response.code==401){
+    let data=pm.response.json()
+    if (data.message && data.message.includes('Expired')){
+        pm.environment.set('jwt',null)
+        jwt=pm.environment.get('jwt')
+        pm.request.headers.add({
+        key: 'Authorization',
+        value: 'Bearer ' + jwt
+        })
+    }
+}
+
+
+========post request for login
+
+if (pm.response.code==200){
+    let data=pm.response.json()
+    if (data.token){
+        pm.environment.set('jwt',data.token)
+    }
+}

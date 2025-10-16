@@ -29,6 +29,11 @@ class Authentication:
         
         if name:
             get_email=get_jwt_email()
+            cu_email=email_exists(data['email'])
+
+            if cu_email and get_email != data['email'] :
+                return jsonify({"message":'Email already exists try some other',"status":400})
+            
             if get_email:
                 database.update(data,get_email)
                 expiry=datetime.datetime.utcnow()+datetime.timedelta(minutes=1)

@@ -31,6 +31,7 @@ def get_users():
         return jsonify({'data':'No data found'})
     
 @app.route('/getusers/<int:id>',methods=['GET'])
+@check_token_expiry
 def get_single_user(id):
     result=list(database.get_users(id))
     if result:
